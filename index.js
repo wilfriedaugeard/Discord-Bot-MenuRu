@@ -1,10 +1,18 @@
+ /**
+     * index.js
+     *
+     * Discord Bot 
+     *
+     * @author     Willou <augeardw@gmail.com>
+     * @copyright  2019 Willou
+     * @version    1.0.0-beta
+     */
 
 const discord = require('discord.js');
 const client = new discord.Client();
 
 //API RU
 var myjson = 'null';
-
 require('http').get('http://waugeard.com/API_menu_ru', function(res)
 {
 	var buff= new Buffer(0);
@@ -20,7 +28,7 @@ require('http').get('http://waugeard.com/API_menu_ru', function(res)
 	});
 });
 
-
+//get date
 function dateFr()
 {
     var mois = new Array("janvier", "fevrier", "mars", "avril", "mai", "juin", "juillet", "aout", "septembre", "octobre", "novembre", "decembre");
@@ -33,16 +41,14 @@ function dateFr()
 }
 
 
-//Affiche le menu selon la chaine et le jour
+//Display menu of a date and chains 
 function creer_menu(date, chaine){
     var myObj = JSON.parse(myjson);
     var message = myObj['date'][date]['Déjeuner'][chaine];
-
     if(message != "menu non communiqué" && message != "FERMÉE"){
         var entree =message['Entrée'];
         var plat = message['Plat'];
         var dessert = message['Dessert'];
-
         message = 
                         "**Entrée:** \n"+entree+"\n"+
                         "**Plat: **\n"+plat+"\n"+
@@ -54,7 +60,7 @@ function creer_menu(date, chaine){
 }
 
 
-
+//Display menu of the given day
 function affiche_jour(date){
     var myObj = JSON.parse(myjson);
     var message = {embed: {
@@ -91,7 +97,7 @@ function affiche_jour(date){
     return message;
 }
 
-
+//Check the date
 function availableDate(date){
     var myObj = JSON.parse(myjson);
     for (var d in myObj['date']){
@@ -101,6 +107,7 @@ function availableDate(date){
     }return false;
 }
 
+//Display available days
 function ShowavailableDate(){
     var myObj = JSON.parse(myjson);
     var message = "**Jours disponibles**\n\n"
@@ -111,7 +118,7 @@ function ShowavailableDate(){
 }
 
 
-
+//Display commands
 function help(){
     var myObj = JSON.parse(myjson);
     var message = {embed: {
@@ -141,35 +148,34 @@ function help(){
 
 
 
-// BOT
+//BOT
 client.on('ready', function(){
     console.log("Bot => OK")
     affiche_jour(dateFr());
 })
 
-
+//Message treatment
 var prefixe = ".";
-
 client.on('message', function(message){
-
+    //Ping Pong
     if(message.content === prefixe+'ping'){
         message.channel.send('Pong !')
     }
-
+    //Help
     if(message.content === prefixe+'help'){
        var help_message = help();
        message.channel.send(help_message)
     }
-
+    //Date
     if(message.content === prefixe+'date'){
         message.channel.send(dateFr())
     }
-
+    //Display menus of the current day
     if(message.content === prefixe+'menu'){
         var menu = affiche_jour(dateFr());
         message.channel.send(menu);
     }
-
+    //Display menus of a chosen day
     if(message.content.startsWith(prefixe+"menuof")){
         //SPLIT COMMAND 
         const arg = message.content.slice(prefixe+"menuof").trim().split(/ +/g);
@@ -194,14 +200,13 @@ client.on('message', function(message){
             }  
         }
     }
-
+    //Display available dates
     if(message.content == prefixe+"daysmenu"){
         var days = ShowavailableDate();
         message.channel.send(days);
     }
-
-
 })
+
 
 client.login('YourTokenHere')
 
