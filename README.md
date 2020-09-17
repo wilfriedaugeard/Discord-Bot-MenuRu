@@ -27,8 +27,13 @@ $ git clone https://github.com/wilfriedaugeard/Discord-Bot-MenuRu/
 **.help** - *Display commands board.* <br>
 **.ping**- *Pong !*
 
+</br>
 
+### Example
 
+</br>
+<img src="https://github.com/wilfriedaugeard/Discord-Bot-MenuRu/blob/master/capture.png" alt="screenshot">
+</br>
 
  ## Author
 
